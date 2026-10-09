@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "SMQ SBC — Plateforme qualité",
+  "short_name": "SMQ SBC",
+  "description": "Plateforme de management de la qualité du Service de Biologie Clinique, CHUD-B/A Parakou.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0F4C5C",
+  "theme_color": "#0F4C5C",
+  "categories": ["medical", "productivity"],
+  "icons": [
+    { "src": "icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

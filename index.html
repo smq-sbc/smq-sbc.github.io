@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SMQ SBC — Plateforme qualité</title>
+<meta name="description" content="Plateforme de management de la qualité du Service de Biologie Clinique, CHUD-B/A Parakou.">
+<meta name="theme-color" content="#0F4C5C">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SMQ SBC">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #0F4C5C; overflow: hidden; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #fff; }
+  #app { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+  #accueil { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+    background: linear-gradient(135deg, #0F4C5C 0%, #1B6B7D 62%, #2A7F73 100%); transition: opacity .35s ease; z-index: 2; text-align: center; padding: 24px; }
+  #accueil.fini { opacity: 0; pointer-events: none; }
+  #accueil img { width: 132px; height: 132px; border-radius: 28px; box-shadow: 0 8px 28px rgba(0, 0, 0, .25); }
+  #accueil h1 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: .01em; }
+  #accueil p { margin: 0; font-size: 14px; color: #D9ECE9; }
+  .roue { width: 26px; height: 26px; border: 3px solid rgba(255, 255, 255, .3); border-top-color: #F0C27B; border-radius: 50%; animation: tour 1s linear infinite; }
+  @keyframes tour { to { transform: rotate(360deg); } }
+  #secours { display: none; font-size: 13.5px; color: #D9ECE9; max-width: 340px; line-height: 1.5; }
+  #secours a { color: #F0C27B; }
+  #installer { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 3;
+    display: none; align-items: center; gap: 10px; background: #fff; color: #1C2A2D; border-radius: 12px; padding: 8px 8px 8px 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .28); font-size: 13.5px; max-width: calc(100vw - 32px); }
+  #installer img { width: 28px; height: 28px; border-radius: 7px; }
+  #installer button { font: inherit; border: 0; border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+  #installer .oui { background: #0F4C5C; color: #fff; font-weight: 600; }
+  #installer .non { background: transparent; color: #566A6D; padding: 7px 8px; }
+  @media (prefers-reduced-motion: reduce) { .roue { animation: none; } #accueil { transition: none; } }
+</style>
+</head>
+<body>
+<div id="accueil" role="status" aria-live="polite">
+  <img src="icone-192.png" alt="Logo du Service de Biologie Clinique">
+  <h1>SMQ SBC — Plateforme qualité</h1>
+  <p>Service de Biologie Clinique · CHUD-B/A, Parakou</p>
+  <div class="roue" aria-hidden="true"></div>
+  <div id="secours">Le chargement est long. Vérifiez la connexion Internet, ou
+    <a href="https://script.google.com/macros/s/AKfycbxuBEngUMaDuxqTpyJDjnuCvbb1n4QSyr_jlFhPEOTcLkwIqEk6I971ZKgL0-XNd81C/exec" target="_top" rel="noopener">ouvrez la plateforme directement</a>.</div>
+</div>
+<iframe id="app" title="SMQ SBC — Plateforme qualité" src="https://script.google.com/macros/s/AKfycbxuBEngUMaDuxqTpyJDjnuCvbb1n4QSyr_jlFhPEOTcLkwIqEk6I971ZKgL0-XNd81C/exec"
+  allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+<div id="installer" role="dialog" aria-label="Installer l'application">
+  <img src="favicon-48.png" alt="">
+  <span>Installer SMQ SBC sur cet appareil ?</span>
+  <button class="oui" id="instOui" type="button">Installer</button>
+  <button class="non" id="instNon" type="button" aria-label="Plus tard">Plus tard</button>
+</div>
+<script>
+(function () {
+  var accueil = document.getElementById('accueil'), app = document.getElementById('app');
+  var fini = false;
+  function masquer() { if (fini) return; fini = true; accueil.classList.add('fini'); setTimeout(function () { accueil.style.display = 'none'; }, 400); }
+  app.addEventListener('load', function () { setTimeout(masquer, 600); });
+  setTimeout(function () { if (!fini) document.getElementById('secours').style.display = 'block'; }, 15000);
+
+  // Hors connexion : page d'information (le service ne garde aucune donnée sur l'appareil)
+  window.addEventListener('offline', function () { if (!fini) document.getElementById('secours').style.display = 'block'; });
+
+  // Installation de l'application (Chrome, Edge, Android)
+  var invite = null, bandeau = document.getElementById('installer');
+  var installee = window.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: window-controls-overlay)').matches);
+  function refuseRecemment() { try { return Date.now() - Number(localStorage.getItem('smq-install-plus-tard') || 0) < 7 * 864e5; } catch (e) { return false; } }
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); invite = e;
+    if (!installee && !refuseRecemment()) setTimeout(function () { bandeau.style.display = 'flex'; }, 2500);
+  });
+  document.getElementById('instOui').onclick = function () {
+    bandeau.style.display = 'none';
+    if (invite) { invite.prompt(); invite = null; }
+  };
+  document.getElementById('instNon').onclick = function () {
+    bandeau.style.display = 'none';
+    try { localStorage.setItem('smq-install-plus-tard', String(Date.now())); } catch (e) { }
+  };
+  window.addEventListener('appinstalled', function () { bandeau.style.display = 'none'; });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { }); });
+  }
+})();
+</script>
+</body>
+</html>
